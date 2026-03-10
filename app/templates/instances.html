@@ -10,4 +10,188 @@
     </li>
 {% endfor %}
 </ul>
+
+
+
+<style>
+
+.container{
+    width:1200px;
+    margin:auto;
+}
+
+.instance-card{
+    border:1px solid #e6e6e6;
+    border-radius:6px;
+    padding:16px;
+    margin-bottom:12px;
+    background:#fafafa;
+}
+
+.instance-header{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.instance-type{
+    color:#888;
+    font-size:13px;
+}
+
+.button-group{
+    margin-top:10px;
+}
+
+.btn{
+    border:none;
+    padding:6px 14px;
+    border-radius:4px;
+    cursor:pointer;
+    margin-right:6px;
+}
+
+.btn-ops{
+    background:#1677ff;
+    color:white;
+}
+
+.btn-dev{
+    background:#52c41a;
+    color:white;
+}
+
+.btn:hover{
+    opacity:0.85;
+}
+
+.result-table{
+    width:100%;
+    border-collapse: collapse;
+    margin-top:20px;
+}
+
+.result-table th{
+    background:#f5f7fa;
+    padding:8px;
+    border:1px solid #e6e6e6;
+}
+
+.result-table td{
+    padding:8px;
+    border:1px solid #e6e6e6;
+}
+
+.result-table tr:nth-child(even){
+    background:#fafafa;
+}
+
+</style>
+
+<div class="container">
+
+<h2>数据库实例</h2>
+
+{% for inst in instances %}
+
+<div class="instance-card">
+
+<div class="instance-header">
+{{ inst.name }}
+</div>
+
+<div class="instance-type">
+{{ inst.db_type }} | {{ inst.host }}:{{ inst.port }}
+</div>
+
+<div class="button-group">
+
+<form action="/instances/inspect/{{ inst.host }}/{{ inst.port }}" method="post">
+
+<input type="hidden" name="user" value="{{ inst.user }}">
+<input type="hidden" name="password" value="{{ inst.password }}">
+
+<button class="btn btn-ops" type="submit" name="inspect_type" value="ops">
+运维巡检
+</button>
+
+<button class="btn btn-dev" type="submit" name="inspect_type" value="dev">
+开发巡检
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+
+{% if sql_result %}
+
+<h2>巡检结果</h2>
+
+<table class="result-table">
+
+<tr>
+<th>库</th>
+<th>表</th>
+<th>巡检项</th>
+<th>SQL</th>
+<th>结果</th>
+</tr>
+
+{% for r in sql_result %}
+
+<tr>
+
+<td>{{ r.db }}</td>
+<td>{{ r.table }}</td>
+<td>{{ r.name }}</td>
+<td>{{ r.sql }}</td>
+
+<td>
+
+{% if r.columns %}
+
+<table>
+
+<tr>
+{% for c in r.columns %}
+<th>{{ c }}</th>
+{% endfor %}
+</tr>
+
+{% for row in r.result %}
+<tr>
+{% for v in row %}
+<td>{{ v }}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+
+</table>
+
+{% else %}
+
+{{ r.result }}
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endif %}
+
+</div>
+
+
+
+
+
 {% endblock %}
