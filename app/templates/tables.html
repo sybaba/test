@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>表列表</h2>
+<ul>
+{% for t in tables %}
+    <li>
+        <a href="/tables/{{ host }}/{{ port }}/{{ db_name }}/{{ t }}/inspect?user={{ user }}&password={{ password }}">{{ t }}</a>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

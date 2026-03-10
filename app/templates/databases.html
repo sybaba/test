@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>数据库列表</h2>
+<ul>
+{% for db in databases %}
+    <li>
+        <a href="/tables/{{ host }}/{{ port }}/{{ db }}?user={{ user }}&password={{ password }}">{{ db }}</a>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

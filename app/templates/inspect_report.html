@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>数据库巡检报告</title>
+<style>
+table{border-collapse:collapse;width:100%;}
+th,td{border:1px solid #ccc;padding:8px;}
+th{background:#f5f5f5;}
+</style>
+</head>
+<body>
+<h1>数据库巡检报告</h1>
+<p>实例: {{host}}:{{port}}</p>
+<p>数据库: {{db_name}}</p>
+<p>表: {{table_name}}</p>
+<p>时间: {{time}}</p>
+<hr>
+{% for item in sql_result %}
+<h3>{{item.name}}</h3>
+<table>
+<thead>
+<tr>
+{% for col in item.columns %}
+<th>{{col}}</th>
+{% endfor %}
+</tr>
+</thead>
+<tbody>
+{% for row in item.result %}
+<tr>
+{% for value in row %}
+<td>{{value}}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endfor %}
+</body>
+</html>

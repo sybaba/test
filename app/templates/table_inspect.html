@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2>表 {{ table_name }} 巡检</h2>
+
+<form method="POST">
+
+    <textarea name="sql_script" rows="5" class="form-control" placeholder="输入SQL巡检脚本"></textarea>
+
+    <div class="mt-2">
+
+        <button name="inspect_type" value="manual" class="btn btn-primary">
+            执行SQL
+        </button>
+
+        <button type="submit" name="inspect_type" value="ops">
+            运维巡检
+        </button>
+
+        <button type="submit" name="inspect_type" value="dev">
+            开发巡检
+        </button>
+
+
+    </div>
+
+</form>
+
+        <form method="post" action="/tables/{{host}}/{{port}}/{{db_name}}/{{table_name}}/export_report">
+
+        <button type="submit">
+            导出HTML巡检报告
+            </button>
+
+        </form>
+
+
+
+{% if sql_result %}
+
+<h3 class="mt-4">巡检结果</h3>
+
+{% for item in sql_result %}
+
+<h5>SQL: {{ item.name }}</h5>
+
+<table class="table table-bordered mt-2">
+
+
+<thead>
+<tr>
+{% for col in item.columns %}
+<th>{{ col }}</th>
+{% endfor %}
+</tr>
+</thead>
+
+
+
+    {% for row in item.result %}
+    <tr>
+        {% for col in row %}
+        <td>{{ col }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% endfor %}
+
+{% endif %}
+
+{% endblock %}

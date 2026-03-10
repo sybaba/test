@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>数据库实例</h2>
+<ul>
+{% for inst in instances %}
+    <li>
+        <a href="/databases/{{ inst.host }}/{{ inst.port }}?user={{ inst.user }}&password={{ inst.password }}">
+            {{ inst.name }} ({{ inst.db_type }})
+        </a>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}

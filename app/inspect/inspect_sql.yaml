@@ -1,0 +1,20 @@
+ops:
+
+  - name: 检查数据库大小
+    version: "5.6"
+    sql: "select ist.table_schema,round(sum(ist.data_length+ist.index_length)/1024/1024,2) as total_size_mb,round(sum(ist.data_length)/1024/1024,2) as data_size_mb,round(sum(ist.index_length)/1024/1024,2) as index_size_mb,iss.default_character_set_name,iss.default_collation_name from information_schema.tables as ist join information_schema.schemata as iss on ist.table_schema = iss.SCHEMA_NAME where ist.table_schema not in ('information_schema','mysql','performance_schema','sys','percona_schema') group by ist.table_schema,iss.default_character_set_name,iss.default_collation_name order by sum(ist.data_length+ist.index_length) desc limit 200"
+
+  - name: 检查索引中包含的列数
+    version: "1.0.20"
+    sql: "select database_name,table_name,index_name,count(*)-1 as column_count from mysql.innodb_index_stats where stat_value=0 group by database_name,table_name,index_name having count(*) > 6 order by column_count desc limit 100"
+
+dev:
+  - name: 表结构
+    version: "8.0"
+    sql: "DESC {table}"
+
+  - name: 字段数量
+    version: "5"
+    sql: "SELECT COUNT(*) FROM information_schema.columns
+          WHERE table_schema='{db}' AND table_name='{table}'"
+
